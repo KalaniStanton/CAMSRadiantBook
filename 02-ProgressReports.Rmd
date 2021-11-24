@@ -30,8 +30,6 @@ some stuff
 
 Error from inside the model, possibly due to version incompatibilities. May have to force inputs to numpy array.
 
-![]('_bookdown_files/image_files/Error_9_4.jpg')
-
 ### Aims
 
 ### Attitude
