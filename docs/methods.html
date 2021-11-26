@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Section 1 Introduction | Progress Journal for CAMS Project, Team Radiant</title>
+  <title>Section 3 Model Architectures | Progress Journal for CAMS Project, Team Radiant</title>
   <meta name="description" content="The following contains details on the project for the CAMS project, wherein our team evaluates and deploys machine learning models to identify meteors seen in footage from low-light survaillance cameras." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Section 1 Introduction | Progress Journal for CAMS Project, Team Radiant" />
+  <meta property="og:title" content="Section 3 Model Architectures | Progress Journal for CAMS Project, Team Radiant" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="KalaniStanton/CAMSReport" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Section 1 Introduction | Progress Journal for CAMS Project, Team Radiant" />
+  <meta name="twitter:title" content="Section 3 Model Architectures | Progress Journal for CAMS Project, Team Radiant" />
   
   <meta name="twitter:description" content="The following contains details on the project for the CAMS project, wherein our team evaluates and deploys machine learning models to identify meteors seen in footage from low-light survaillance cameras." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="documentation.html"/>
+<link rel="prev" href="documentation.html"/>
+<link rel="next" href="performance.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -169,9 +169,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="intro" class="section level1" number="1">
-<h1><span class="header-section-number">Section 1</span> Introduction</h1>
-<p>This is indeed a book. Wow.</p>
+<div id="methods" class="section level1" number="3">
+<h1><span class="header-section-number">Section 3</span> Model Architectures</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="methods.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="methods.html#cb3-1" aria-hidden="true" tabindex="-1"></a>featureset_df <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">&#39;data/featuresets_ModelHistories.csv&#39;</span>)</span>
+<span id="cb3-2"><a href="methods.html#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="methods.html#cb3-3" aria-hidden="true" tabindex="-1"></a>accuracy_df <span class="ot">&lt;-</span> featureset_df <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="methods.html#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">train_loss =</span> loss, <span class="at">train_accuracy =</span> accuracy) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="methods.html#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;val_loss&quot;</span>, <span class="st">&quot;train_loss&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="methods.html#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(train_accuracy, val_accuracy), <span class="at">names_to =</span> <span class="st">&quot;phase&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;accuracy&quot;</span>)</span>
+<span id="cb3-7"><a href="methods.html#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="methods.html#cb3-8" aria-hidden="true" tabindex="-1"></a>loss_df <span class="ot">&lt;-</span> featureset_df <span class="sc">%&gt;%</span></span>
+<span id="cb3-9"><a href="methods.html#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">train_loss =</span> loss, <span class="at">train_accuracy =</span> accuracy) <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="methods.html#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">&quot;val_accuracy&quot;</span>, <span class="st">&quot;train_accuracy&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-11"><a href="methods.html#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(train_loss, val_loss), <span class="at">names_to =</span> <span class="st">&quot;phase&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;loss&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="methods.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(accuracy_df, <span class="fu">aes</span>(<span class="at">x =</span> epoch, <span class="at">y =</span> accuracy, <span class="at">color =</span> variable_set, <span class="at">linetype =</span> phase)) <span class="sc">+</span> </span>
+<span id="cb4-2"><a href="methods.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">10</span>) <span class="sc">+</span> </span>
+<span id="cb4-3"><a href="methods.html#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fl">0.4</span>,<span class="fl">1.0</span>) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="methods.html#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="fu">vars</span>(model), <span class="fu">vars</span>(len_instance)) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="methods.html#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Model Training History Comparison&quot;</span>, <span class="at">subtitle =</span> <span class="st">&quot;Differences between training and test performance across feature sets.&quot;</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<p><img src="CAMS-Project-Progress_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 
 </div>
             </section>
@@ -179,8 +196,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="documentation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="documentation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="performance.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -211,7 +228,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/01-intro.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/03-Methods.Rmd",
 "text": "Edit"
 },
 "history": {

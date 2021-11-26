@@ -1,4 +1,4 @@
-# Model Performance {#performance}
+# Model Architectures {#methods}
 
 ```{r}
 library(tidyverse)

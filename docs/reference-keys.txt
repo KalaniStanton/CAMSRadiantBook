@@ -1,9 +1,10 @@
 intro
-progress
-week-1-830---94
-achievements
-aggravations
-aims
-attitude
-week-2
+documentation
+getting-started
+adding-a-model
+training-a-model
+directory-structure
+section
+updates-and-modifications
+methods
 performance

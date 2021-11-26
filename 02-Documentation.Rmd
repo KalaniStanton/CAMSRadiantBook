@@ -1,0 +1,29 @@
+# Documentation {#documentation}
+
+such an absolute book, wow.
+
+## Getting Started
+
+### Adding a Model
+
+If you would like to experiment with your own architecture variations
+
+
+### Training A Model
+
+
+### Directory Structure
+
+```
+|_README.md
+|_train_experiment.py
+|_train_LatLng.py
+|
+|_Data
+| |_
+|_Models
+```
+
+### 
+
+## Updates and Modifications
