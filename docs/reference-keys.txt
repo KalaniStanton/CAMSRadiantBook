@@ -4,7 +4,9 @@ getting-started
 adding-a-model
 training-a-model
 directory-structure
-section
+data
+results
 updates-and-modifications
 methods
-performance
+evaluation
+feature-set-data
