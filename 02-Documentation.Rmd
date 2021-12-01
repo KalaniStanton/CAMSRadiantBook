@@ -28,4 +28,37 @@ If you would like to experiment with your own architecture variations
 
 #### Results
 
+## System Specifications
+
+### Hardware
+
+#### GPU
+
+Model
+: Quadro RTX 6000 
+
+Memory
+: 2GB VRAM
+
+#### CPU
+
+Model
+: Intel(R) Xeon(R) Silver 4210
+
+Clock Speed
+: 2.20 GHz
+
+### Softeware
+
+#### Packages
+
+#### Drivers
+
+
+#### Drivers
+
+Driver Version: 470.82.01    CUDA Version: 11.4  
+
+
+
 ## Updates and Modifications

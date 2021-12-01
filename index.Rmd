@@ -14,9 +14,13 @@ description: "The following contains details on the project for the CAMS project
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,
+knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE,
                       warning = FALSE)
+
+library(tidyverse)
+library(kableExtra)
+library(kableExtra)
 ```
 
 # Preface {-}
