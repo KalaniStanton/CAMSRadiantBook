@@ -116,20 +116,6 @@
   \thm@postskip=\thm@preskip
 }
 \makeatother
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -138,7 +124,7 @@
 
 \title{Progress Journal for CAMS Project, Team Radiant}
 \author{Sara Haman, Kalani Stanton, Vivienne Prince}
-\date{2021-11-24}
+\date{2021-11-25}
 
 \begin{document}
 \maketitle
@@ -156,80 +142,88 @@ This project was completed in accordance with the requirements for the Practical
 \hypertarget{intro}{%
 \chapter{Introduction}\label{intro}}
 
-\hypertarget{progress}{%
-\chapter{Progress Reports}\label{progress}}
+This is indeed a book. Wow.
+
+\hypertarget{documentation}{%
+\chapter{Documentation}\label{documentation}}
+
+such an absolute book, wow.
+
+\hypertarget{getting-started}{%
+\section{Getting Started}\label{getting-started}}
+
+\hypertarget{adding-a-model}{%
+\subsection{Adding a Model}\label{adding-a-model}}
+
+If you would like to experiment with your own architecture variations
+
+\hypertarget{training-a-model}{%
+\subsection{Training A Model}\label{training-a-model}}
+
+\hypertarget{directory-structure}{%
+\subsection{Directory Structure}\label{directory-structure}}
+
+\begin{verbatim}
+|_README.md
+|_train_experiment.py
+|_train_LatLng.py
+|
+|_Data
+| |_
+|_Models
+\end{verbatim}
+
+\hypertarget{data}{%
+\subsubsection{Data}\label{data}}
+
+\hypertarget{results}{%
+\subsubsection{Results}\label{results}}
+
+\hypertarget{updates-and-modifications}{%
+\section{Updates and Modifications}\label{updates-and-modifications}}
+
+\hypertarget{methods}{%
+\chapter{Model Architectures}\label{methods}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(plyr)}
 \FunctionTok{library}\NormalTok{(tidyverse)}
-\FunctionTok{library}\NormalTok{(Hmisc)}
-\FunctionTok{library}\NormalTok{(httr)}
-\FunctionTok{library}\NormalTok{(jsonlite)}
-\FunctionTok{library}\NormalTok{(tidyverse)}
-\CommentTok{\#install.packages("tmap")}
-\FunctionTok{library}\NormalTok{(tmap)}
-\FunctionTok{library}\NormalTok{(leaflet)}
-\FunctionTok{library}\NormalTok{(treemap)}
-\FunctionTok{library}\NormalTok{(kableExtra)}
-
-\StringTok{\textasciigrave{}}\AttributeTok{\%notin\%}\StringTok{\textasciigrave{}} \OtherTok{\textless{}{-}} \FunctionTok{Negate}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{\%in\%}\StringTok{\textasciigrave{}}\NormalTok{)}
-
-\NormalTok{MakePretty }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) \{}
-\NormalTok{  x }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kbl}\NormalTok{(}\AttributeTok{align =} \StringTok{"c"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{kable\_material}\NormalTok{()}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\hypertarget{week-1-830---94}{%
-\section{Week 1 (8/30 - 9/4)}\label{week-1-830---94}}
-
-some stuff
-
-\hypertarget{achievements}{%
-\subsection{Achievements}\label{achievements}}
-
-\hypertarget{aggravations}{%
-\subsection{Aggravations}\label{aggravations}}
-
-Error from inside the model, possibly due to version incompatibilities. May have to force inputs to numpy array.
-
-\hypertarget{aims}{%
-\subsection{Aims}\label{aims}}
-
-\hypertarget{attitude}{%
-\subsection{Attitude}\label{attitude}}
-
-\hypertarget{week-2}{%
-\section{Week 2}\label{week-2}}
-
-Trained the model on intervals 30 - 50
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{LenInstance }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{30}\NormalTok{,}\DecValTok{35}\NormalTok{,}\DecValTok{40}\NormalTok{,}\DecValTok{45}\NormalTok{,}\DecValTok{50}\NormalTok{, }\DecValTok{55}\NormalTok{)}
-\NormalTok{maxAcc }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.9238}\NormalTok{, }\FloatTok{0.9331}\NormalTok{, }\FloatTok{0.9396}\NormalTok{, }\FloatTok{0.9417}\NormalTok{,}\FloatTok{0.8177}\NormalTok{, }\FloatTok{0.9097}\NormalTok{)}
-\NormalTok{maxValAcc }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.9164}\NormalTok{, }\FloatTok{0.9349}\NormalTok{, }\FloatTok{0.8876}\NormalTok{, }\FloatTok{0.9168}\NormalTok{, }\FloatTok{0.8240}\NormalTok{, }\FloatTok{0.9107}\NormalTok{)}
-\NormalTok{epoch }\OtherTok{\textless{}{-}}  \FunctionTok{c}\NormalTok{(}\DecValTok{13}\NormalTok{, }\DecValTok{12}\NormalTok{, }\DecValTok{15}\NormalTok{, }\DecValTok{49}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{17}\NormalTok{)}
-
-\NormalTok{modelResults }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\FunctionTok{cbind}\NormalTok{(LenInstance,maxAcc, maxValAcc, epoch))}
-
-\NormalTok{modelResults }\OtherTok{\textless{}{-}} \FunctionTok{pivot\_longer}\NormalTok{(modelResults, }\AttributeTok{cols =} \FunctionTok{c}\NormalTok{(maxAcc, maxValAcc))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{library}\NormalTok{(ggplot2)}
+\NormalTok{featureset\_df }\OtherTok{=} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{\textquotesingle{}data/featuresets\_ModelHistories.csv\textquotesingle{}}\NormalTok{)}
 
-\FunctionTok{ggplot}\NormalTok{(modelResults, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ epoch, }\AttributeTok{y =}\NormalTok{ value, }\AttributeTok{color =} \FunctionTok{factor}\NormalTok{(LenInstance), }\AttributeTok{shape =}\NormalTok{ name)) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{()}
+\NormalTok{accuracy\_df }\OtherTok{\textless{}{-}}\NormalTok{ featureset\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}\AttributeTok{train\_loss =}\NormalTok{ loss, }\AttributeTok{train\_accuracy =}\NormalTok{ accuracy) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\StringTok{"val\_loss"}\NormalTok{, }\StringTok{"train\_loss"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{c}\NormalTok{(train\_accuracy, val\_accuracy), }\AttributeTok{names\_to =} \StringTok{"phase"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"accuracy"}\NormalTok{)}
+
+\NormalTok{loss\_df }\OtherTok{\textless{}{-}}\NormalTok{ featureset\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{rename}\NormalTok{(}\AttributeTok{train\_loss =}\NormalTok{ loss, }\AttributeTok{train\_accuracy =}\NormalTok{ accuracy) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\StringTok{"val\_accuracy"}\NormalTok{, }\StringTok{"train\_accuracy"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{c}\NormalTok{(train\_loss, val\_loss), }\AttributeTok{names\_to =} \StringTok{"phase"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"loss"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(accuracy\_df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ epoch, }\AttributeTok{y =}\NormalTok{ accuracy, }\AttributeTok{color =}\NormalTok{ variable\_set, }\AttributeTok{linetype =}\NormalTok{ phase)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_line}\NormalTok{(}\AttributeTok{linewidth =} \DecValTok{10}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{ylim}\NormalTok{(}\FloatTok{0.4}\NormalTok{,}\FloatTok{1.0}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{facet\_grid}\NormalTok{(}\FunctionTok{vars}\NormalTok{(model), }\FunctionTok{vars}\NormalTok{(len\_instance)) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Model Training History Comparison"}\NormalTok{, }\AttributeTok{subtitle =} \StringTok{"Differences between training and test performance across feature sets."}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"bottom"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \includegraphics{CAMS-Project-Progress_files/figure-latex/unnamed-chunk-4-1.pdf}
 
-\hypertarget{performance}{%
-\chapter{Model Performance}\label{performance}}
+\hypertarget{evaluation}{%
+\chapter{Model Evaluation}\label{evaluation}}
+
+\hypertarget{feature-set-data}{%
+\section{Feature set data}\label{feature-set-data}}
 
 \begin{Shaded}
 \begin{Highlighting}[]

@@ -1,0 +1,64 @@
+# Documentation {#documentation}
+
+such an absolute book, wow.
+
+## Getting Started
+
+### Adding a Model
+
+If you would like to experiment with your own architecture variations
+
+
+### Training A Model
+
+
+### Directory Structure
+
+```
+|_README.md
+|_train_experiment.py
+|_train_LatLng.py
+|
+|_Data
+| |_
+|_Models
+```
+
+#### Data 
+
+#### Results
+
+## System Specifications
+
+### Hardware
+
+#### GPU
+
+Model
+: Quadro RTX 6000 
+
+Memory
+: 2GB VRAM
+
+#### CPU
+
+Model
+: Intel(R) Xeon(R) Silver 4210
+
+Clock Speed
+: 2.20 GHz
+
+### Softeware
+
+#### Packages
+
+#### Drivers
+
+
+#### Drivers
+
+Driver Version: 470.82.01    CUDA Version: 11.4  
+
+
+
+## Updates and Modifications

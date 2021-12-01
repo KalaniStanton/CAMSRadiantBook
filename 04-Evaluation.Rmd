@@ -1,0 +1,259 @@
+# Model Evaluation {#evaluation}
+
+## Model Performance Comparison
+
+For the sake of consistency in model comparisons, all model evaluation metrics are pulled from models using A 70/15/15 train/validation/test split. It is important to note, however, the data splits across models are not consistent due to the variations in pre-processing methods required for each model and the random shuffling that occurs as part of these methods in the LSTM and P-LSTM architectures. 
+
+### Training Histories
+
+```{r}
+histories_df <- read_csv('data/train_histories/ModelHistories.csv')
+xgboost_hist <- read_csv('data/train_histories/model_XGBoost_trainhistory.csv')
+
+histories_df <- histories_df %>% select(-c(date, len_instance))
+xgboost_history <- xgboost_hist %>%
+  mutate(error_train = 1-error_train) %>%
+  mutate(error_val = 1-error_val) %>%
+  mutate(model = "XGBoost") %>%
+  rename(accuracy = error_train) %>%
+  rename(loss = logloss_train) %>%
+  rename(val_accuracy = error_val) %>%
+  rename(val_loss = logloss_val) %>%
+  relocate(loss, .before = accuracy) %>%
+  relocate(val_loss, .before = val_accuracy) %>%
+  relocate(model, .before = epoch)
+  
+histories_df <- rbind(histories_df, xgboost_history)
+
+
+acc_df <- histories_df %>%
+  rename(train_loss = loss, train_accuracy = accuracy) %>%
+  select(-c("val_loss", "train_loss")) %>%
+  pivot_longer(cols = c(train_accuracy, val_accuracy), names_to = "phase", values_to = "value") %>%
+  mutate(metric = "accuracy") %>%
+  mutate(phase = ifelse(phase == 'val_accuracy', "validation", "training"))
+
+loss_df <- histories_df %>%
+  rename(train_loss = loss, train_accuracy = accuracy) %>%
+  select(-c("val_accuracy", "train_accuracy")) %>%
+  pivot_longer(cols = c(train_loss, val_loss), names_to = "phase", values_to = "value")  %>%
+  mutate(metric = "loss") %>%
+  mutate(phase = ifelse(phase == 'val_loss', "validation", "training"))
+
+hist_df <- rbind(acc_df, loss_df)
+
+table(hist_df$model)
+```
+
+
+#### Baseline LSTMs
+
+- Accuracy and Loss Curve
+
+```{r}
+hist_df %>%
+  filter(model %in% c("Baseline", "LeakyPostRegLSTM")) %>%
+  filter(metric == "accuracy")%>%
+  ggplot(., aes(x = epoch, y = value, linetype = phase)) + 
+    geom_line() + 
+    theme(title = element_text("Accuarcy Curves for Stacked Bi-Directional LSTM models.")) +
+    facet_wrap(~model, scale = "free_x")
+
+```
+
+```{r}
+hist_df %>%
+  filter(model %in% c("Baseline", "LeakyPostRegLSTM")) %>%
+  filter(metric == "loss")%>%
+  ggplot(., aes(x = epoch, y = value, linetype = phase)) + 
+    geom_line() + 
+    theme(title = element_text("Accuarcy Curves for Stacked Bi-Directional LSTM models.")) +
+    facet_wrap(~model, scale = "free")
+```
+
+
+#### Parallel Models
+
+- Accuracy and Loss Curve
+
+```{r}
+hist_df %>% 
+  filter(model %in% c("PCNNGRU11", "PCNNLSTM111", "PCNNLSTMT4", "PLSTM11")) %>%
+  filter(metric == "accuracy")%>%
+  ggplot(., aes(x = epoch, y = value, linetype = phase)) + 
+    geom_line() + 
+    theme(title = element_text("Accuarcy Curves for Stacked P-LSTM models.")) +
+    facet_wrap(~model, scale = "free_x")
+```
+
+
+```{r}
+hist_df %>% 
+  filter(model %in% c("PCNNGRU11", "PCNNLSTM111", "PCNNLSTMT4", "PLSTM11")) %>%
+  filter(metric == "loss")%>%
+  ggplot(., aes(x = epoch, y = value, linetype = phase)) + geom_line() + facet_wrap(~model, scale = "free_x")
+```
+
+#### XGBoost
+
+- Accuracy and Loss Curve
+
+```{r}
+hist_df %>% 
+  filter(model %in% c("XGBoost")) %>%
+  filter(metric == "accuracy") %>%
+  ggplot(., aes(x = epoch, y = value, linetype = phase)) + 
+    geom_line() + 
+    theme(title = element_text("Accuarcy Curves for XGBoost model.")) +
+    xlab("Trees")
+```
+
+```{r}
+hist_df %>% 
+  filter(model %in% c("XGBoost")) %>%
+  filter(metric == "loss") %>%
+  ggplot(., aes(x = epoch, y = value, linetype = phase)) + 
+    geom_line() + 
+    theme(title = element_text("Accuarcy Curves for XGBoost model.")) +
+    xlab("Trees")
+```
+
+### Test Evaluation
+
+```{r}
+test_results_df <- read_csv('data/ModelTestResults.csv')
+```
+
+
+#### Evaluation Metrics
+
+- Accuracy
+```{r}
+test_results_df %>%
+  rename(Accuracy = `Validation Accuracy`) %>%
+  select(ModelName, Accuracy, Recall, Precision) %>%
+  pivot_longer(., c(Accuracy, Recall, Precision), names_to = "Metric") %>%
+  mutate(value = value*100) %>%
+  ggplot(., aes(x = Metric, y = value, fill = ModelName)) +
+    geom_bar(stat = 'identity', position = "dodge") + 
+    coord_cartesian(ylim=c(90,100))
+```
+```{r}
+test_results_df %>%
+  rename(Accuracy = `Validation Accuracy`) %>%
+  select(ModelName, Accuracy, Recall, Precision) %>%
+  pivot_longer(., c(Accuracy, Recall, Precision), names_to = "Metric") %>%
+  mutate(value = value*100) %>%
+  ggplot(., aes(x = ModelName, y = value, fill = Metric)) +
+    geom_bar(stat = 'identity', position = "dodge") + 
+    coord_cartesian(ylim=c(90,100)) +
+    theme(title = element_text("Model Performance Metrics Comparison"), axis.text.x = element_text(angle = 90, vjust = 0.1, hjust=.95))
+```
+
+- Precision
+- Recall
+
+```{r}
+test_results_df
+```
+
+
+#### Confusion Matrices
+
+```{r}
+conf_values <- test_results_df %>%
+  select(ModelName, TP,TN,FP,FN)
+
+pull_confusion_matrices <- function(x) {
+  return(list(x[1], as.data.frame(matrix(c(x[2], x[5], x[4],x[3]), nrow = 2), row.names = c("Predicted Meteor", "Predicted Non-Meteor"), col.names = c("True", "False"))))
+}
+
+cm_list <- apply(conf_values,1, function(x) pull_confusion_matrices(x))
+
+draw_confusion_matrices <- function(x) {
+  name <- x[1]
+  df <- as.data.frame(x[2])
+  df <- rename(df, c('Meteor' = 'V1', 'Non-Meteor' = 'V2'))
+  cf_table <- kbl(df, caption = name) %>% kable_classic(full_width = F, html_font = "Cambria")
+  return(cf_table)
+}
+
+lapply(cm_list, function(x) draw_confusion_matrices(x))
+```
+
+`r cf_table_list[1]`
+
+## Load Testing & Scalability
+
+```{r, echo = F}
+lt_files = list.files(path = 'data/loadtests')
+
+#Read in loadtest data
+
+for (f in 1:length(lt_files)) {
+  lt_data = read_csv(paste0('data/loadtests/', lt_files[f]))
+  if (f == 1) {
+    ltDF = lt_data
+  } else {
+    ltDF = rbind(ltDF, lt_data)
+  }
+}
+```
+
+### Pre-processing
+
+```{r}
+ggplot(ltDF, aes(x = num_files, y = preprocessing_time, color = model_name)) + geom_line()
+```
+
+
+
+### Training Time
+
+Training time per epoch (Batch Size = 100)
+on a single GPU
+
+Baseline LSTM
+: `r 1276.0287117958069/39` seconds per epoch.
+
+LeakyPostReg LSTM
+: `r 1126.4491121768951/39` seconds per epoch
+
+
+### Inference
+
+```{r}
+ggplot(ltDF, aes(x = num_files, y = inference_time, color = model_name)) + geom_line()
+```
+
+## Additional Visualizations
+
+### Feature Set Comparison
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+featureset_df = read_csv('data/featuresets_ModelHistories.csv')
+
+accuracy_df <- featureset_df %>%
+  rename(train_loss = loss, train_accuracy = accuracy) %>%
+  select(-c("val_loss", "train_loss")) %>%
+  pivot_longer(cols = c(train_accuracy, val_accuracy), names_to = "phase", values_to = "accuracy")
+
+loss_df <- featureset_df %>%
+  rename(train_loss = loss, train_accuracy = accuracy) %>%
+  select(-c("val_accuracy", "train_accuracy")) %>%
+  pivot_longer(cols = c(train_loss, val_loss), names_to = "phase", values_to = "loss")
+```
+
+
+```{r, echo = False}
+ggplot(accuracy_df, aes(x = epoch, y = accuracy, color = variable_set, linetype = phase)) + 
+  geom_line(linewidth = 10) + 
+  ylim(0.4,1.0) +
+  facet_grid(vars(model), vars(len_instance)) +
+  ggtitle("Model Training History Comparison", subtitle = "Differences between training and test performance across feature sets.") + theme(legend.position = "bottom")
+```
+

@@ -1,0 +1,17 @@
+# Model Architectures {#methods}
+
+## LSTMs
+
+Two Models Baseline and LeakyPostReg
+
+### Preprocessing
+
+## P-LSTM
+
+### Preprocessing
+
+
+## XGBoost
+
+### Preprocesssing
+
